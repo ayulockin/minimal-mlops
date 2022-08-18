@@ -79,7 +79,7 @@ def get_model(args):
         args (ml_collections.ConfigDict): Configuration.
     """
     # Backbone
-    base_model = self.get_backbone()
+    base_model = get_backbone(args)
 
     # Stack layers
     inputs = layers.Input(shape=(

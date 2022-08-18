@@ -16,7 +16,9 @@ def download_and_get_dataset(
         split (str): Split of the dataset to be downloaded. Allowed values are `train`,
             `valid`, and `test`
     """
-    info = INFO[dataset_name]
+    info = INFO.get(dataset_name, None)
+    if info is None:
+        KeyError(f"The provided dataset_name: {dataset_name} is incorrect")
 
     data_path = tf.keras.utils.get_file(origin=info['url'], md5_hash=info['MD5'])
 

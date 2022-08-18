@@ -13,6 +13,7 @@ def get_wandb_configs() -> ml_collections.ConfigDict:
 
 def get_dataset_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
+    configs.dataset_name = "bloodmnist"
     configs.image_height = 28
     configs.image_width = 28
     configs.channels = 3

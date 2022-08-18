@@ -1,0 +1,28 @@
+{
+    "os": "Linux-4.19.0-21-cloud-amd64-x86_64-with-debian-10.12",
+    "python": "3.7.12",
+    "heartbeatAt": "2022-08-18T15:13:40.685731",
+    "startedAt": "2022-08-18T15:13:40.432610",
+    "docker": null,
+    "gpu": "Tesla K80",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "--config",
+        "configs/baseline.py",
+        "--wandb"
+    ],
+    "state": "running",
+    "program": "train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/ayulockin/minimal-mlops",
+        "commit": "ff42f673b42fdf8c454471bb89248f9d01431299"
+    },
+    "email": "mein2work@gmail.com",
+    "root": "/home/ayut-tf-dev-vm/workshop/minimal-mlops",
+    "host": "ayut-dev-tf",
+    "username": "ayut-tf-dev-vm",
+    "executable": "/opt/conda/bin/python"
+}
