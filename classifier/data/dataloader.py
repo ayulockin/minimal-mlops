@@ -9,7 +9,7 @@ class GetDataloader():
     def __init__(self, args):
         self.args = args
 
-    def dataloader(self, images, labels, dataloader_type='train'):
+    def get_dataloader(self, images, labels, dataloader_type='train'):
         '''
         Args:
             images: List of images loaded in the memory.
@@ -58,7 +58,7 @@ class GetDataloader():
             elif dataloader_type=='valid' or dataloader_type=='test':
                 img = tf.image.resize(
                     img, 
-                    [self.args.train_config.model_img_height, self.args.train_config.model_img_width]],
+                    [self.args.train_config.model_img_height, self.args.train_config.model_img_width],
                 )
             else:
                 raise NotImplementedError("No data type")
@@ -69,7 +69,7 @@ class GetDataloader():
 
     def parse_data(self, image, label, dataloader_type='train'):
         # Parse Image
-        image = preprocess_image(image)
+        image = self.preprocess_image(image)
 
         if dataloader_type in ['train', 'valid']:
             # Parse Target

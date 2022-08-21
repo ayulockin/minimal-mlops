@@ -35,4 +35,3 @@ def download_and_get_dataset(
             test_images = data['test_images']
             test_labels = data['test_labels'].flatten()
             return info, (test_images, test_labels)
-

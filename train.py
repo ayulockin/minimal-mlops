@@ -10,6 +10,7 @@ import wandb
 import tensorflow as tf
 
 from classifier.data import download_and_get_dataset
+from classifier.data import GetDataloader
 from classifier.model import get_model
 
 # Config
@@ -21,6 +22,7 @@ CONFIG = config_flags.DEFINE_config_file("config")
 def main(_):
     # Get configs from the config file.
     config = CONFIG.value
+    print(config)
 
     if FLAGS.wandb:
         run = wandb.init(
@@ -35,8 +37,9 @@ def main(_):
     info, (valid_images, valid_labels) = download_and_get_dataset(dataset_name, 'valid')
 
     # Get dataloader
-    trainloader = None
-    validloader = None
+    make_dataloader = GetDataloader(config)
+    trainloader = make_dataloader.get_dataloader(train_images, train_labels)
+    validloader = make_dataloader.get_dataloader(valid_images, valid_labels)
 
     # Get model
     tf.keras.backend.clear_session()
@@ -44,13 +47,18 @@ def main(_):
     model.summary()
 
     # Compile the model
+    model.compile(
+        optimizer = config.train_config.optimizer,
+        loss = config.train_config.loss,
+        metrics = config.train_config.metrics
+    )
 
-
-    # # Train the model
-
-
-
+    # Train the model
+    model.fit(
+        trainloader,
+        validation_data = validloader,
+        epochs = config.train_config.epochs
+    )
 
 if __name__ == "__main__":
     app.run(main)
-    

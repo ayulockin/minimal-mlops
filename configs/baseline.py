@@ -6,7 +6,6 @@ def get_wandb_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.project = "medmnist2D"
     configs.log_validation_table = False
-
     # configs.entity = "wandb_fc"
 
     return configs
@@ -25,13 +24,6 @@ def get_dataset_configs() -> ml_collections.ConfigDict:
 
     return configs
 
-# def get_augmentation_configs() -> ml_collections.ConfigDict:
-#     configs = ml_collections.ConfigDict()
-#     configs.crop_height = 224
-#     configs.crop_width = 224
-
-#     return configs
-
 def get_train_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.model_img_height = 28
@@ -48,6 +40,7 @@ def get_train_configs() -> ml_collections.ConfigDict:
     configs.optimizer = "adam"
     configs.sgd_momentum = 0.9
     configs.loss = "categorical_crossentropy"
+    configs.metrics = ["accuracy"]
     configs.early_patience = 6
     configs.rlrp_factor = 0.2
     configs.rlrp_patience = 3
@@ -73,7 +66,6 @@ def get_config() -> ml_collections.ConfigDict:
     config.seed = 0
     config.wandb_config = get_wandb_configs()
     config.dataset_config = get_dataset_configs()
-    # config.augmentation_config = get_augmentation_configs()
     config.train_config = get_train_configs()
     config.lr_config = get_lr_configs()
 
