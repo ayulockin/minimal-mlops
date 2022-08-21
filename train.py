@@ -7,11 +7,13 @@ from absl import flags
 from ml_collections.config_flags import config_flags
 
 import wandb
+from wandb.keras import WandbCallback
 import tensorflow as tf
 
 from classifier.data import download_and_get_dataset
 from classifier.data import GetDataloader
 from classifier.model import get_model
+from classifier.callbacks import *
 
 # Config
 FLAGS = flags.FLAGS
@@ -24,12 +26,15 @@ def main(_):
     config = CONFIG.value
     print(config)
 
+    CALLBACKS = []
+    # Initialize a Weights and Biases run.
     if FLAGS.wandb:
         run = wandb.init(
             project=CONFIG.value.wandb_config.project,
             job_type='train',
             config=config.to_dict(),
         )
+        CALLBACKS += [WandbCallback(save_model=False)]
 
     # Download and get dataset
     dataset_name = config.dataset_config.dataset_name
@@ -46,6 +51,11 @@ def main(_):
     model = get_model(config)
     model.summary()
 
+    # Initialize callbacks
+    earlystopper = get_earlystopper(config)
+    reduce_lr_on_plateau = get_reduce_lr_on_plateau(config)
+    CALLBACKS += [earlystopper, reduce_lr_on_plateau]
+
     # Compile the model
     model.compile(
         optimizer = config.train_config.optimizer,
@@ -57,7 +67,8 @@ def main(_):
     model.fit(
         trainloader,
         validation_data = validloader,
-        epochs = config.train_config.epochs
+        epochs = config.train_config.epochs,
+        callbacks=CALLBACKS
     )
 
 if __name__ == "__main__":

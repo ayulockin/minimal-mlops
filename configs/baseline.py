@@ -5,7 +5,9 @@ import ml_collections
 def get_wandb_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.project = "medmnist2D"
-    configs.log_validation_table = False
+    configs.log_data_type = "train"
+    configs.log_num_samples = 100
+    configs.log_evaluation_table = False
     # configs.entity = "wandb_fc"
 
     return configs
@@ -16,7 +18,7 @@ def get_dataset_configs() -> ml_collections.ConfigDict:
     configs.image_height = 28
     configs.image_width = 28
     configs.channels = 3
-    configs.apply_resize = False
+    configs.apply_resize = True
     configs.batch_size = 128
     configs.num_classes = 10
     configs.apply_one_hot = True
@@ -24,37 +26,35 @@ def get_dataset_configs() -> ml_collections.ConfigDict:
 
     return configs
 
-def get_train_configs() -> ml_collections.ConfigDict:
+def get_model_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.model_img_height = 28
     configs.model_img_width = 28
     configs.model_img_channels = 3
-    configs.epochs = 3
     configs.backbone = "resnet50"
     configs.use_pretrained_weights = True
+    configs.dropout_rate = 0.5
+    configs.post_gap_dropout = False
+
+    return configs
+
+def get_callback_configs() -> ml_collections.ConfigDict:
+    configs = ml_collections.ConfigDict()
+    configs.early_patience = 6
+    configs.rlrp_factor = 0.2
+    configs.rlrp_patience = 3
+
+    return configs
+
+def get_train_configs() -> ml_collections.ConfigDict:
+    configs = ml_collections.ConfigDict()
+    configs.epochs = 3
     configs.use_augmentations = False
     configs.use_class_weights = False
-    configs.post_gap_dropout = False
-    configs.use_lr_scheduler = False
-    configs.dropout_rate = 0.5
     configs.optimizer = "adam"
     configs.sgd_momentum = 0.9
     configs.loss = "categorical_crossentropy"
     configs.metrics = ["accuracy"]
-    configs.early_patience = 6
-    configs.rlrp_factor = 0.2
-    configs.rlrp_patience = 3
-    configs.resume = False
-
-    return configs
-
-def get_lr_configs() -> ml_collections.ConfigDict:
-    configs = ml_collections.ConfigDict()
-    configs.init_lr_rate = 0.001
-    configs.cosine_decay_steps = 1000
-    configs.exp_decay_steps = 1000
-    configs.exp_decay_rate = 0.96
-    configs.exp_is_staircase = True
 
     return configs
 
@@ -66,7 +66,8 @@ def get_config() -> ml_collections.ConfigDict:
     config.seed = 0
     config.wandb_config = get_wandb_configs()
     config.dataset_config = get_dataset_configs()
+    config.model_config = get_model_configs()
+    config.callback_config = get_callback_configs()
     config.train_config = get_train_configs()
-    config.lr_config = get_lr_configs()
 
     return config

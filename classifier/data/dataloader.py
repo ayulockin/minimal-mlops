@@ -58,7 +58,7 @@ class GetDataloader():
             elif dataloader_type=='valid' or dataloader_type=='test':
                 img = tf.image.resize(
                     img, 
-                    [self.args.train_config.model_img_height, self.args.train_config.model_img_width],
+                    [self.args.model_config.model_img_height, self.args.model_config.model_img_width],
                 )
             else:
                 raise NotImplementedError("No data type")
