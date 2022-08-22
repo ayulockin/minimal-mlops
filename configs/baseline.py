@@ -40,9 +40,15 @@ def get_model_configs() -> ml_collections.ConfigDict:
 
 def get_callback_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
+    # Early stopping
+    configs.use_earlystopping = True
     configs.early_patience = 6
+    # Reduce LR on plateau
+    configs.use_reduce_lr_on_plateau = False
     configs.rlrp_factor = 0.2
     configs.rlrp_patience = 3
+    # Model checkpointing
+    configs.use_model_checkpointing = True
 
     return configs
 

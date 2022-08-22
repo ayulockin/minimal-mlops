@@ -54,7 +54,8 @@ def main(_):
     # Initialize callbacks
     earlystopper = get_earlystopper(config)
     reduce_lr_on_plateau = get_reduce_lr_on_plateau(config)
-    CALLBACKS += [earlystopper, reduce_lr_on_plateau]
+    model_checkpointer = get_model_checkpoint_callback(config)
+    CALLBACKS += [model_checkpointer]
 
     # Compile the model
     model.compile(
