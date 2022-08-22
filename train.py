@@ -55,7 +55,9 @@ def main(_):
     earlystopper = get_earlystopper(config)
     reduce_lr_on_plateau = get_reduce_lr_on_plateau(config)
     model_checkpointer = get_model_checkpoint_callback(config)
-    CALLBACKS += [model_checkpointer]
+    evaluator = get_evaluation_callback(config, trainloader)
+    # CALLBACKS += [model_checkpointer]
+    CALLBACKS += [evaluator]
 
     # Compile the model
     model.compile(
@@ -71,6 +73,11 @@ def main(_):
         epochs = config.train_config.epochs,
         callbacks=CALLBACKS
     )
+
+    sample = next(iter(validloader))[0][0]
+    pred = model(tf.expand_dims(sample, axis=0))
+    print(tf.argmax(tf.squeeze(pred, axis=0)))
+
 
 if __name__ == "__main__":
     app.run(main)
