@@ -42,20 +42,20 @@ class WandbClfEvalCallback(tf.keras.callbacks.Callback):
             self.tables_builder.data_table.add_data(
                 idx,
                 wandb.Image(image),
-                tf.argmax(label, axis=0).numpy()
+                tf.argmax(label, axis=-1).numpy()
             )
-    
+
     def add_model_predictions(self, epoch):
         # Get predicted detections
-        predictions = self._infer()
+        preds = self._infer()
 
         # Iterate through the samples.
         data_table_ref = self.tables_builder.data_table_ref
         table_idxs = data_table_ref.get_index()
-        assert len(table_idxs) == len(predictions)
+        assert len(table_idxs) == len(preds)
 
         for idx in table_idxs:
-            pred = predictions[idx]
+            pred = preds[idx]
 
             # Log a row to the eval table.
             self.tables_builder.pred_table.add_data(
@@ -67,15 +67,10 @@ class WandbClfEvalCallback(tf.keras.callbacks.Callback):
             )
 
     def _infer(self):
-        predictions = []
+        preds = self.model.predict(self.dataloader.batch(32), verbose=0)
+        preds = tf.argmax(preds, axis=1)
 
-        for idx, (image, label) in enumerate(self.dataloader.as_numpy_iterator()):
-            # Get model prediction.
-            pred = self.model(tf.expand_dims(image, axis=0))
-            pred = tf.argmax(tf.squeeze(pred, axis=0))
-            predictions.append(pred)
-
-        return predictions
+        return preds
 
 def get_evaluation_callback(args, dataloader):
     return WandbClfEvalCallback(

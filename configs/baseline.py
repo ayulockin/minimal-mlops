@@ -6,7 +6,7 @@ def get_wandb_configs() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.project = "medmnist2D"
     configs.log_data_type = "train"
-    configs.log_num_samples = 100
+    configs.log_num_samples = -1 # passing -1 will upload the complete dataset
     configs.log_evaluation_table = False
     # configs.entity = "wandb_fc"
 
@@ -20,7 +20,7 @@ def get_dataset_configs() -> ml_collections.ConfigDict:
     configs.channels = 3
     configs.apply_resize = True
     configs.batch_size = 128
-    configs.num_classes = 10
+    configs.num_classes = 8
     configs.apply_one_hot = True
     configs.do_cache = False
 

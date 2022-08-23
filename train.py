@@ -44,7 +44,7 @@ def main(_):
     # Get dataloader
     make_dataloader = GetDataloader(config)
     trainloader = make_dataloader.get_dataloader(train_images, train_labels)
-    validloader = make_dataloader.get_dataloader(valid_images, valid_labels)
+    validloader = make_dataloader.get_dataloader(valid_images, valid_labels, dataloader_type="valid")
 
     # Get model
     tf.keras.backend.clear_session()
@@ -55,8 +55,7 @@ def main(_):
     earlystopper = get_earlystopper(config)
     reduce_lr_on_plateau = get_reduce_lr_on_plateau(config)
     model_checkpointer = get_model_checkpoint_callback(config)
-    evaluator = get_evaluation_callback(config, trainloader)
-    # CALLBACKS += [model_checkpointer]
+    evaluator = get_evaluation_callback(config, validloader)
     CALLBACKS += [evaluator]
 
     # Compile the model
@@ -73,10 +72,6 @@ def main(_):
         epochs = config.train_config.epochs,
         callbacks=CALLBACKS
     )
-
-    sample = next(iter(validloader))[0][0]
-    pred = model(tf.expand_dims(sample, axis=0))
-    print(tf.argmax(tf.squeeze(pred, axis=0)))
 
 
 if __name__ == "__main__":

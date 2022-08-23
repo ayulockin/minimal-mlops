@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 def log_data_as_table(info, images, labels, data_type="train", num_samples=100):
     label_names = info["label"]
+    if num_samples == -1:
+        num_images = len(images)
     # This is the artifact to store the W&B Table.
     # We could have directly uploaded the images and `.csv` files to an artifact,
     # at the cost of no visualization. Note however that for few data formats like those
