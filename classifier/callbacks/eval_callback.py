@@ -8,6 +8,11 @@ class WandbClfEvalCallback(tf.keras.callbacks.Callback):
                  dataloader,
                  num_samples=100):
         super(WandbClfEvalCallback, self).__init__()
+        if wandb.run is None:
+            raise wandb.Error(
+                "You must call wandb.init() before WandbClfEvalCallback()"
+            )
+
         self.dataloader = dataloader.unbatch().take(num_samples)
         self.tables_builder = WandbTablesBuilder()
 
@@ -75,5 +80,5 @@ class WandbClfEvalCallback(tf.keras.callbacks.Callback):
 def get_evaluation_callback(args, dataloader):
     return WandbClfEvalCallback(
         dataloader,
-        num_samples=100
+        num_samples=args.callback_config.viz_num_images
     )

@@ -49,6 +49,11 @@ def get_callback_configs() -> ml_collections.ConfigDict:
     configs.rlrp_patience = 3
     # Model checkpointing
     configs.use_model_checkpointing = True
+    configs.checkpoint_filepath = "wandb/model_{epoch}"
+    configs.save_best_only = True
+    # Model Prediction Viz
+    configs.use_model_pred_viz = True
+    configs.viz_num_images = 100
 
     return configs
 

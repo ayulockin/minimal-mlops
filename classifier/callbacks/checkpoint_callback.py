@@ -18,6 +18,10 @@ class WandbModelCheckpoint(tf.keras.callbacks.ModelCheckpoint):
             initial_value_threshold,
             **kwargs
         )
+        if wandb.run is None:
+            raise wandb.Error(
+                "You must call wandb.init() before WandbModelCheckpoint()"
+            )
 
     def on_epoch_end(self, epoch, logs=None):
         super().on_epoch_end(epoch, logs)
@@ -36,9 +40,9 @@ class WandbModelCheckpoint(tf.keras.callbacks.ModelCheckpoint):
 
 def get_model_checkpoint_callback(args):
     model_checkpointer = WandbModelCheckpoint(
-        filepath='wandb/model_{epoch}',
+        filepath=args.callback_config.checkpoint_filepath,
         monitor='val_loss',
-        save_best_only=True,
+        save_best_only=args.callback_config.save_best_only,
         save_weights_only=False,
         initial_value_threshold=None,
     )
