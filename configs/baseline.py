@@ -1,5 +1,6 @@
 import os
 import ml_collections
+from ml_collections import config_dict
 
 
 def get_wandb_configs() -> ml_collections.ConfigDict:
@@ -20,7 +21,7 @@ def get_dataset_configs() -> ml_collections.ConfigDict:
     configs.channels = 3
     configs.apply_resize = True
     configs.batch_size = 128
-    configs.num_classes = 8
+    configs.num_classes = config_dict.placeholder(int)
     configs.apply_one_hot = True
     configs.do_cache = False
 

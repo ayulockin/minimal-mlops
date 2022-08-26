@@ -44,6 +44,11 @@ def main(_):
     info, (train_images, train_labels) = download_and_get_dataset(dataset_name, 'train')
     info, (valid_images, valid_labels) = download_and_get_dataset(dataset_name, 'valid')
 
+    ## Update the `num_classes` and update wandb config
+    config.dataset_config.num_classes = len(info["label"])
+    wandb.config.update(
+        {"dataset_config.num_classes": config.dataset_config.num_classes})
+
     # Get dataloader
     make_dataloader = GetDataloader(config)
     trainloader = make_dataloader.get_dataloader(train_images, train_labels)
