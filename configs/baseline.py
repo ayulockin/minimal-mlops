@@ -67,9 +67,6 @@ def get_train_configs() -> ml_collections.ConfigDict:
 
     return configs
 
-# TODO (ayulockin): remove get_config to a different py file
-# and condition it with config_string as referenced here:
-# https://github.com/google/ml_collections#parameterising-the-get_config-function
 def get_config() -> ml_collections.ConfigDict:
     config = ml_collections.ConfigDict()
     config.seed = 0
