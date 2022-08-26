@@ -20,6 +20,7 @@ FLAGS = flags.FLAGS
 CONFIG = config_flags.DEFINE_config_file("config")
 flags.DEFINE_bool("wandb", False, "MLOps pipeline for our classifier.")
 flags.DEFINE_bool("log_model", False, "Checkpoint model while training.")
+flags.DEFINE_bool("log_eval", False, "Log model prediction, needs --wandb argument as well.")
 
 
 def main(_):
@@ -69,10 +70,10 @@ def main(_):
         # Custom W&B model checkpoint callback
         model_checkpointer = get_model_checkpoint_callback(config)
         CALLBACKS += [model_checkpointer]
-    
+
     # Custom W&B model prediction visualization callback
     if wandb.run is not None:
-        if callback_config.use_model_pred_viz:
+        if FLAGS.log_eval:
             model_pred_viz = get_evaluation_callback(config, validloader)
             CALLBACKS += [model_pred_viz]
 
