@@ -39,12 +39,21 @@ class WandbModelCheckpoint(tf.keras.callbacks.ModelCheckpoint):
 
 
 def get_model_checkpoint_callback(args):
-    model_checkpointer = WandbModelCheckpoint(
-        filepath=args.callback_config.checkpoint_filepath,
-        monitor='val_loss',
-        save_best_only=args.callback_config.save_best_only,
-        save_weights_only=False,
-        initial_value_threshold=None,
-    )
+    if wandb.run is not None:
+        model_checkpointer = WandbModelCheckpoint(
+            filepath=args.callback_config.checkpoint_filepath,
+            monitor='val_loss',
+            save_best_only=args.callback_config.save_best_only,
+            save_weights_only=False,
+            initial_value_threshold=None,
+        )
+    else:
+        model_checkpointer = tf.keras.callbacks.ModelCheckpoint(
+            filepath=args.callback_config.checkpoint_filepath,
+            monitor='val_loss',
+            save_best_only=args.callback_config.save_best_only,
+            save_weights_only=False,
+            initial_value_threshold=None,
+        )
 
     return model_checkpointer
