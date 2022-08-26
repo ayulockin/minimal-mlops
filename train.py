@@ -36,6 +36,7 @@ def main(_):
             job_type='train',
             config=config.to_dict(),
         )
+        wandb.run._label(code="ccd2022")
         # WandbCallback for experiment tracking
         CALLBACKS += [WandbCallback(save_model=False)]
 
