@@ -47,8 +47,9 @@ def main(_):
 
     ## Update the `num_classes` and update wandb config
     config.dataset_config.num_classes = len(info["label"])
-    wandb.config.update(
-        {"dataset_config.num_classes": config.dataset_config.num_classes})
+    if wandb.run is not None:
+        wandb.config.update(
+            {"dataset_config.num_classes": config.dataset_config.num_classes})
 
     # Get dataloader
     make_dataloader = GetDataloader(config)
